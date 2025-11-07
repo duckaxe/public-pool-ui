@@ -114,7 +114,8 @@
                     <tr [routerLink]="[worker.name]">
                         <td>
                             <button (click)="$event.stopImmediatePropagation()" type="button" pButton pRipple
-                                [pRowToggler]="worker" class="p-button-text p-button-rounded p-button-plain mr-2"
+                                [pRowToggler]="worker" class="p-button-text p-button-rounded p-button-plain mr-2 relative"
+                                style="top:-0.25rem"
                                 [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
 
                             <span class="worker-name font-bold ml-2">{{worker.name}} </span>
@@ -175,7 +176,8 @@
                     <tr>
                         <td>
                             <button (click)="$event.stopImmediatePropagation()" type="button" pButton pRipple
-                                [pRowToggler]="worker" class="p-button-text p-button-rounded p-button-plain mr-2"
+                                [pRowToggler]="worker" class="p-button-text p-button-rounded p-button-plain mr-2 relative"
+                                style="top:-0.25rem"
                                 [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
 
                             <span class="worker-name font-bold ml-2">{{worker.name}} </span>
