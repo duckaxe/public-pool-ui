@@ -121,7 +121,9 @@
 
                         </td>
                         <td>
-                            {{getSessionCount(worker.name, clientInfo.workers)}} Sessions
+                            <ng-container *ngIf="getSessionCount(worker.name, clientInfo.workers) as sessionCount">
+                                {{sessionCount}} Session{{ sessionCount === 1 ? '' : 's' }}
+                            </ng-container>
                         </td>
                         <td>
                             {{getTotalHashRate(worker.name, clientInfo.workers) | hashSuffix}}
