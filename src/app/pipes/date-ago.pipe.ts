@@ -6,7 +6,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class DateAgoPipe implements PipeTransform {
 
-  transform(value: any, args?: any): any {
+  transform(value: any, args: { hasSuffix?: boolean } = { hasSuffix: true }): any {
     if (value) {
       const seconds = Math.abs(Math.floor((+new Date() - +new Date(value)) / 1000));
       if (seconds < 29) // less than 30 seconds ago will show as 'Just now'
@@ -22,16 +22,10 @@ export class DateAgoPipe implements PipeTransform {
       };
       let counter;
       for (const i in intervals) {
-        const number = (seconds / intervals[i]).toFixed(1);
+        const number = Math.round(seconds / intervals[i]);
         counter = Math.floor(seconds / intervals[i]);
-        
-        if (counter > 0)
-          return number + ' ' + i + 's'; // plural (2 days ago)
-          // if (counter === 1) {
-          //   return number + ' ' + i + ''; // singular (1 day ago)
-          // } else {
-          //   return number + ' ' + i + 's'; // plural (2 days ago)
-          // }
+
+        if (counter > 0) return `${number} ${i}${number > 1 ? 's' : ''}${args?.hasSuffix ? ' ago' : ''}`;
       }
     }
     return value;
