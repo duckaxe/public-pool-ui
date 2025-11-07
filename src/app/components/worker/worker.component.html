@@ -7,10 +7,6 @@
                         <span class="block text-500 font-medium mb-3">ID</span>
                         <div class="text-900 font-medium text-xl">{{workerInfo.name}}</div>
                     </div>
-                    <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
-                        [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
-                        <i class="pi pi-id-card text-blue-500 text-xl"></i>
-                    </div>
                 </div>
                 <!-- <span class="text-green-500 font-medium">24 new </span> -->
                 <span class="text-500">{{workerInfo.sessionId}}</span>
@@ -34,10 +30,6 @@
                     <div>
                         <span class="block text-500 font-medium mb-3">Uptime</span>
                         <div class="text-900 font-medium text-xl">{{workerInfo.startTime | dateAgo:{hasSuffix: false} }}</div>
-                    </div>
-                    <div class="flex align-items-center justify-content-center bg-cyan-100 border-round"
-                        [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
-                        <i class="pi pi-clock text-cyan-500 text-xl"></i>
                     </div>
                 </div>
                 <!-- <span class="text-green-500 font-medium">520 </span>-->
