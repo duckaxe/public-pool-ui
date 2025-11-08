@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -6,11 +7,27 @@ import { Injectable } from '@angular/core';
 export class EnvService {
   constructor() { }
 
+  private getHost(): string {
+    return window.location.hostname;
+  }
+
+  private getProtocol(): string {
+    return window.location.protocol + '//';
+  }
+
   get apiUrl(): string {
-    return `http://${window.location.hostname}:2019`;
+    if (environment.API_URL.startsWith(':')) {
+      return this.getProtocol() + this.getHost() + environment.API_URL;
+    }
+
+    return environment.API_URL;
   }
 
   get stratumUrl(): string {
-    return `${window.location.hostname}:2018`;
+    if (environment.STRATUM_URL.startsWith(':')) {
+      return this.getHost() + environment.STRATUM_URL;
+    }
+
+    return environment.STRATUM_URL;
   }
 }
