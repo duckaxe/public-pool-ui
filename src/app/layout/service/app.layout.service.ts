@@ -1,100 +1,105 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
+import { LocalStorageService } from '../../services/local-storage.service';
 
 export interface AppConfig {
-    inputStyle: string;
-    colorScheme: string;
-    theme: string;
-    ripple: boolean;
-    menuMode: string;
-    scale: number;
+  inputStyle: string;
+  colorScheme: string;
+  theme: string;
+  ripple: boolean;
+  menuMode: string;
+  scale: number;
 }
 
 interface LayoutState {
-    staticMenuDesktopInactive: boolean;
-    overlayMenuActive: boolean;
-    profileSidebarVisible: boolean;
-    configSidebarVisible: boolean;
-    staticMenuMobileActive: boolean;
-    menuHoverActive: boolean;
+  staticMenuDesktopInactive: boolean;
+  overlayMenuActive: boolean;
+  profileSidebarVisible: boolean;
+  configSidebarVisible: boolean;
+  staticMenuMobileActive: boolean;
+  menuHoverActive: boolean;
 }
 
 @Injectable({
-    providedIn: 'root',
+  providedIn: 'root',
 })
 export class LayoutService {
 
-    config: AppConfig = {
-        ripple: false,
-        inputStyle: 'outlined',
-        menuMode: 'static',
-        colorScheme: 'light',
-        theme: 'lara-light-indigo',
-        scale: 14,
-    };
+  config: AppConfig = {
+    ripple: false,
+    inputStyle: 'outlined',
+    menuMode: 'static',
+    colorScheme: 'light',
+    theme: 'lara-light-indigo',
+    scale: 14,
+  };
 
-    state: LayoutState = {
-        staticMenuDesktopInactive: false,
-        overlayMenuActive: false,
-        profileSidebarVisible: false,
-        configSidebarVisible: false,
-        staticMenuMobileActive: false,
-        menuHoverActive: false
-    };
 
-    private configUpdate = new Subject<AppConfig>();
+  state: LayoutState = {
+    staticMenuDesktopInactive: this.localStorageService.isMenuInactive,
+    overlayMenuActive: false,
+    profileSidebarVisible: false,
+    configSidebarVisible: false,
+    staticMenuMobileActive: false,
+    menuHoverActive: false
+  };
 
-    private overlayOpen = new Subject<any>();
+  private configUpdate = new Subject<AppConfig>();
 
-    configUpdate$ = this.configUpdate.asObservable();
+  private overlayOpen = new Subject<any>();
 
-    overlayOpen$ = this.overlayOpen.asObservable();
+  configUpdate$ = this.configUpdate.asObservable();
 
-    onMenuToggle() {
-        if (this.isOverlay()) {
-            this.state.overlayMenuActive = !this.state.overlayMenuActive;
-            if (this.state.overlayMenuActive) {
-                this.overlayOpen.next(null);
-            }
-        }
+  overlayOpen$ = this.overlayOpen.asObservable();
 
-        if (this.isDesktop()) {
-            this.state.staticMenuDesktopInactive = !this.state.staticMenuDesktopInactive;
-        }
-        else {
-            this.state.staticMenuMobileActive = !this.state.staticMenuMobileActive;
+  constructor(
+    private localStorageService: LocalStorageService
+  ) { }
 
-            if (this.state.staticMenuMobileActive) {
-                this.overlayOpen.next(null);
-            }
-        }
+  onMenuToggle() {
+    if (this.isOverlay()) {
+      this.state.overlayMenuActive = !this.state.overlayMenuActive;
+      if (this.state.overlayMenuActive) {
+        this.overlayOpen.next(null);
+      }
     }
 
-    showProfileSidebar() {
-        this.state.profileSidebarVisible = !this.state.profileSidebarVisible;
-        if (this.state.profileSidebarVisible) {
-            this.overlayOpen.next(null);
-        }
-    }
+    if (this.isDesktop()) {
+      this.state.staticMenuDesktopInactive = !this.state.staticMenuDesktopInactive;
+      this.localStorageService.isMenuInactive = this.state.staticMenuDesktopInactive;
+    } else {
+      this.state.staticMenuMobileActive = !this.state.staticMenuMobileActive;
 
-    showConfigSidebar() {
-        this.state.configSidebarVisible = true;
+      if (this.state.staticMenuMobileActive) {
+        this.overlayOpen.next(null);
+      }
     }
+  }
 
-    isOverlay() {
-        return this.config.menuMode === 'overlay';
+  showProfileSidebar() {
+    this.state.profileSidebarVisible = !this.state.profileSidebarVisible;
+    if (this.state.profileSidebarVisible) {
+      this.overlayOpen.next(null);
     }
+  }
 
-    isDesktop() {
-        return window.innerWidth > 991;
-    }
+  showConfigSidebar() {
+    this.state.configSidebarVisible = true;
+  }
 
-    isMobile() {
-        return !this.isDesktop();
-    }
+  isOverlay() {
+    return this.config.menuMode === 'overlay';
+  }
 
-    onConfigUpdate() {
-        this.configUpdate.next(this.config);
-    }
+  isDesktop() {
+    return window.innerWidth > 991;
+  }
 
+  isMobile() {
+    return !this.isDesktop();
+  }
+
+  onConfigUpdate() {
+    this.configUpdate.next(this.config);
+  }
 }

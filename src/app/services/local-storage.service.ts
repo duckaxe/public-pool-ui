@@ -7,6 +7,7 @@ import { BehaviorSubject, Observable, shareReplay } from 'rxjs';
 export class LocalStorageService {
 
   private PARTICLES = 'PARTICLES';
+  private IS_MENU_INACTIVE = 'IS_MENU_INACTIVE';
 
   private _particles$: BehaviorSubject<boolean>;
   public particles$: Observable<boolean>;
@@ -37,8 +38,13 @@ export class LocalStorageService {
   public setParticles(particles: boolean) {
     this.set(this.PARTICLES, JSON.stringify({ particles }));
     this._particles$.next(particles);
-
   }
 
+  get isMenuInactive(): boolean {
+    return this.get(this.IS_MENU_INACTIVE) === 'true';
+  }
 
+  set isMenuInactive(value: boolean) {
+    this.set(this.IS_MENU_INACTIVE, value.toString());
+  }
 }
