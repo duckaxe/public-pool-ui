@@ -100,10 +100,10 @@
 
                 <ng-template pTemplate="header">
                     <tr>
-                        <th>Name</th>
+                        <th>Worker</th>
                         <th>Session ID</th>
                         <th>Hashrate</th>
-                        <th>Session Best Difficulty</th>
+                        <th>Best Difficulty</th>
                         <th>Uptime</th>
                         <th>Last Seen</th>
                     </tr>
@@ -112,7 +112,7 @@
 
                 <ng-template pTemplate="groupheader" let-worker let-rowIndex="rowIndex" let-expanded="expanded">
                     <tr [routerLink]="[worker.name]">
-                        <td>
+                        <td class="white-space-nowrap">
                             <button (click)="$event.stopImmediatePropagation()" type="button" pButton pRipple
                                 [pRowToggler]="worker" class="p-button-text p-button-rounded p-button-plain mr-2 relative"
                                 style="top:-0.25rem"
@@ -126,10 +126,10 @@
                                 {{sessionCount}} Session{{ sessionCount === 1 ? '' : 's' }}
                             </ng-container>
                         </td>
-                        <td>
+                        <td class="white-space-nowrap">
                             {{getTotalHashRate(worker.name, clientInfo.workers) | hashSuffix}}
                         </td>
-                        <td>
+                        <td class="white-space-nowrap">
                             {{getBestDifficulty(worker.name, clientInfo.workers) | numberSuffix}}
                         </td>
                         <td>
@@ -144,10 +144,10 @@
                     <tr [routerLink]="[worker.name, worker.sessionId]">
                         <td></td>
                         <td>{{worker.sessionId}}</td>
-                        <td>{{worker.hashRate | hashSuffix}}</td>
-                        <td>{{worker.bestDifficulty | numberSuffix}}</td>
-                        <td>{{worker.startTime | dateAgo:{hasSuffix: false} }}</td>
-                        <td>{{worker.lastSeen | dateAgo}}</td>
+                        <td class="white-space-nowrap">{{worker.hashRate | hashSuffix}}</td>
+                        <td class="white-space-nowrap">{{worker.bestDifficulty | numberSuffix}}</td>
+                        <td class="white-space-nowrap">{{worker.startTime | dateAgo:{hasSuffix: false} }}</td>
+                        <td class="white-space-nowrap">{{worker.lastSeen | dateAgo}}</td>
                     </tr>
                 </ng-template>
 
@@ -162,10 +162,10 @@
 
                 <ng-template pTemplate="header">
                     <tr>
-                        <th>Name</th>
+                        <th>Worker</th>
                         <th>Session ID</th>
                         <th>Hashrate</th>
-                        <th>Session Best Difficulty</th>
+                        <th>Best Difficulty</th>
                         <th>Uptime</th>
                         <th>Last Seen</th>
                     </tr>
@@ -174,7 +174,7 @@
 
                 <ng-template pTemplate="groupheader" let-worker let-rowIndex="rowIndex" let-expanded="expanded">
                     <tr>
-                        <td>
+                        <td class="white-space-nowrap">
                             <button (click)="$event.stopImmediatePropagation()" type="button" pButton pRipple
                                 [pRowToggler]="worker" class="p-button-text p-button-rounded p-button-plain mr-2 relative"
                                 style="top:-0.25rem"

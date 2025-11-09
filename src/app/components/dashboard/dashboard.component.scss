@@ -1,3 +1,9 @@
 .worker-name {
     line-height: 42px;
 }
+
+::ng-deep .p-datatable-table {
+    td:first-child {
+        padding-left: 0.25rem !important;
+    }
+}
