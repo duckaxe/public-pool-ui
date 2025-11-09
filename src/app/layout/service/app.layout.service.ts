@@ -14,7 +14,6 @@ export interface AppConfig {
 interface LayoutState {
   staticMenuDesktopInactive: boolean;
   overlayMenuActive: boolean;
-  profileSidebarVisible: boolean;
   configSidebarVisible: boolean;
   staticMenuMobileActive: boolean;
   menuHoverActive: boolean;
@@ -38,7 +37,6 @@ export class LayoutService {
   state: LayoutState = {
     staticMenuDesktopInactive: this.localStorageService.isMenuInactive,
     overlayMenuActive: false,
-    profileSidebarVisible: false,
     configSidebarVisible: false,
     staticMenuMobileActive: false,
     menuHoverActive: false
@@ -73,13 +71,6 @@ export class LayoutService {
       if (this.state.staticMenuMobileActive) {
         this.overlayOpen.next(null);
       }
-    }
-  }
-
-  showProfileSidebar() {
-    this.state.profileSidebarVisible = !this.state.profileSidebarVisible;
-    if (this.state.profileSidebarVisible) {
-      this.overlayOpen.next(null);
     }
   }
 
