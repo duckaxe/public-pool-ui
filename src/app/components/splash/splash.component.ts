@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { Router } from '@angular/router';
 import { combineLatest, map, Observable, shareReplay } from 'rxjs';
 import { HashSuffixPipe } from '../../pipes/hash-suffix.pipe';
 import { AppService } from '../../services/app.service';
@@ -32,6 +33,7 @@ export class SplashComponent {
   constructor(
     private appService: AppService,
     private envService: EnvService,
+    private router: Router,
   ) {
 
     this.info$ = this.appService.getInfo().pipe(shareReplay({ refCount: true, bufferSize: 1 }));
@@ -114,6 +116,11 @@ export class SplashComponent {
         }
       }
     };
+  }
 
+  onSubmit() {
+    if (!this.address.invalid) {
+      this.router.navigate(['app', this.address.value]);
+    }
   }
 }
