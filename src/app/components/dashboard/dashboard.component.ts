@@ -82,7 +82,7 @@ export class DashboardComponent {
               backgroundColor: yellow600,
               borderColor: yellow600,
               tension: .4,
-              pointRadius: 1,
+              pointRadius: 3,
               borderWidth: 1
             },
             {
@@ -93,7 +93,7 @@ export class DashboardComponent {
               backgroundColor: primaryColor,
               borderColor: primaryColor,
               tension: .4,
-              pointRadius: 1,
+              pointRadius: 3,
               borderWidth: 1
             }
           ]
@@ -103,10 +103,22 @@ export class DashboardComponent {
 
     this.chartOptions = {
       maintainAspectRatio: false,
+      onHover: (event: any, chartElement: any[]) => {
+        (event.native ? event.native.target : event.target).style.cursor =
+          chartElement && chartElement.length > 0 ? 'pointer' : 'default';
+      },
       plugins: {
         legend: {
           labels: {
             color: textColor
+          }
+        },
+        tooltip: {
+          callbacks: {
+            label: (context: any) => {
+              const value = context.parsed.y;
+              return HashSuffixPipe.transform(value);
+            }
           }
         }
       },
