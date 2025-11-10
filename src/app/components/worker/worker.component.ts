@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { combineLatest, map, Observable, shareReplay } from 'rxjs';
+import { map, Observable, shareReplay, switchMap, timer } from 'rxjs';
 
 import { HashSuffixPipe } from '../../pipes/hash-suffix.pipe';
 import { WorkerService } from '../../services/worker.service';
@@ -13,15 +13,11 @@ import { AppService } from 'src/app/services/app.service';
 })
 export class WorkerComponent {
 
-  public workerInfo$: Observable<any>;
-
-  public chartData$: Observable<any>;
-
   public chartOptions: any;
 
+  public workerInfo$: Observable<any>;
+  public chartData$: Observable<any>;
   public networkInfo$: Observable<any>;
-  private networkInfo:any;
-
 
   constructor(
     private workerService: WorkerService,
@@ -32,20 +28,24 @@ export class WorkerComponent {
     const textColor = documentStyle.getPropertyValue('--text-color');
     const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
     const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
+    const primaryColor = documentStyle.getPropertyValue('--primary-color');
 
-    this.workerInfo$ = this.workerService.getWorkerInfo(this.route.snapshot.params['address'], this.route.snapshot.params['workerName'], this.route.snapshot.params['workerId']).pipe(
+    this.workerInfo$ = timer(0, 60000).pipe(
+      switchMap(() => this.workerService.getWorkerInfo(
+        this.route.snapshot.params['address'],
+        this.route.snapshot.params['workerName'],
+        this.route.snapshot.params['workerId']
+      )),
       shareReplay({ bufferSize: 1, refCount: true })
     );
 
-    this.networkInfo$ = this.appService.getNetworkInfo().pipe(
-      shareReplay({ refCount: true, bufferSize: 1 })
+    this.networkInfo$ = timer(0, 60000).pipe(
+      switchMap(() => this.appService.getNetworkInfo()),
+      shareReplay({ bufferSize: 1, refCount: true })
     );
 
-    this.chartData$ = combineLatest([ this.workerInfo$, this.networkInfo$]).pipe(
-      map(([workerInfo, networkInfo]) => {
-
-        this.networkInfo = networkInfo;
-
+    this.chartData$ = this.workerInfo$.pipe(
+      map((workerInfo: any) => {
         return {
           labels: workerInfo.chartData.map((d: any) => d.label),
           datasets: [
@@ -53,25 +53,35 @@ export class WorkerComponent {
               label: workerInfo.name,
               data: workerInfo.chartData.map((d: any) => d.data),
               fill: false,
-              backgroundColor: documentStyle.getPropertyValue('--primary-color'),
-              borderColor: documentStyle.getPropertyValue('--primary-color'),
+              backgroundColor: primaryColor,
+              borderColor: primaryColor,
               tension: .4,
-              pointRadius: 1,
+              pointRadius: 3,
               borderWidth: 1
             }
           ]
-        }
+        };
       })
     );
 
-
-
     this.chartOptions = {
       maintainAspectRatio: false,
+      onHover: (event: any, chartElement: any[]) => {
+        (event.native ? event.native.target : event.target).style.cursor =
+          chartElement && chartElement.length > 0 ? 'pointer' : 'default';
+      },
       plugins: {
         legend: {
           labels: {
             color: textColor
+          }
+        },
+        tooltip: {
+          callbacks: {
+            label: (context: any) => {
+              const value = context.parsed.y;
+              return HashSuffixPipe.transform(value);
+            }
           }
         }
       },
@@ -104,7 +114,5 @@ export class WorkerComponent {
       }
     };
   }
-
-
 
 }

@@ -49,13 +49,11 @@
         <div class="col-12">
             <div class="card">
                 <h4>Login</h4>
-                <div class="field text-center">
-
+                <form (ngSubmit)="onSubmit()" novalidate class="field text-center">
                     <input [formControl]="address" placeholder="Address (bc1...)" pInputText id="address" type="text"
                         class="p-inputtext p-component p-element">
-                    <button [disabled]="address.invalid" class="ml-3 mt-3" pButton label="My Workers"
-                        [routerLink]="['app',address.value]"></button>
-                </div>
+                    <button [disabled]="address.invalid" class="ml-3 mt-3" type="submit" pButton label="My Workers"></button>
+                </form>
             </div>
         </div>
 
