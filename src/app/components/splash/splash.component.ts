@@ -49,7 +49,14 @@ export class SplashComponent {
     this.blockData$ = this.info$.pipe(map(info => info.blockData));
     this.userAgents$ = this.info$.pipe(map(info => info.userAgents));
     this.highScores$ = this.info$.pipe(map(info => info.highScores));
-    this.uptime$ = this.info$.pipe(map(info => info.uptime))
+    this.uptime$ = this.info$.pipe(
+      map(info => {
+        const date = new Date(info.uptime);
+        const randomMs = Math.floor(Math.random() * 999);
+        date.setMilliseconds(randomMs);
+        return date.toISOString();
+      })
+    );
 
     this.chartData$ = timer(0, 600000).pipe(
       switchMap(() => this.appService.getInfoChart()),
