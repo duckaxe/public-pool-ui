@@ -1,7 +1,7 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Table } from 'primeng/table';
-import { combineLatest, map, Observable, shareReplay } from 'rxjs';
+import { map, Observable, shareReplay, switchMap, timer } from 'rxjs';
 
 import { HashSuffixPipe } from '../../pipes/hash-suffix.pipe';
 import { AppService } from '../../services/app.service';
@@ -14,60 +14,52 @@ import { ClientService } from '../../services/client.service';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent implements AfterViewInit {
+export class DashboardComponent {
 
   public address: string;
-
-  public clientInfo$: Observable<any>;
-  public chartData$: Observable<any>;
-
   public chartOptions: any;
 
   public networkInfo$: Observable<any>;
-  private networkInfo:any;
-
-  @ViewChild('dataTable') dataTable!: Table;
-
+  public clientInfo$: Observable<any>;
+  public chartData$: Observable<any>;
   public expandedRows$: Observable<any>;
 
-
+  @ViewChild('dataTable') dataTable!: Table;
 
   constructor(
     private clientService: ClientService,
     private route: ActivatedRoute,
     private appService: AppService
   ) {
-
-    this.networkInfo$ = this.appService.getNetworkInfo().pipe(
-      shareReplay({ refCount: true, bufferSize: 1 })
-    );
-
-    this.address = this.route.snapshot.params['address'];
-    this.clientInfo$ = this.clientService.getClientInfo(this.address).pipe(
-      shareReplay({ refCount: true, bufferSize: 1 })
-    );
-
-    this.expandedRows$ = this.clientInfo$.pipe(map((info: any) => {
-
-      return info.workers.reduce((pre: any, cur: any) => { pre[cur.name] = true; return pre; }, {});
-
-    }));
-
     const documentStyle = getComputedStyle(document.documentElement);
     const textColor = documentStyle.getPropertyValue('--text-color');
     const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
     const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
+    const yellow600 = documentStyle.getPropertyValue('--yellow-600');
+    const primaryColor = documentStyle.getPropertyValue('--primary-color');
 
+    this.address = this.route.snapshot.params['address'];
 
-    this.chartData$ = combineLatest([this.clientService.getClientInfoChart(this.address),  this.networkInfo$]).pipe(
-      map(([chartData, networkInfo]) => {
+    this.networkInfo$ = timer(0, 60000).pipe(
+      switchMap(() => this.appService.getNetworkInfo()),
+      shareReplay({ refCount: true, bufferSize: 1 })
+    );
 
-        this.networkInfo = networkInfo;
+    this.clientInfo$ = timer(0, 60000).pipe(
+      switchMap(() => this.clientService.getClientInfo(this.address)),
+      shareReplay({ refCount: true, bufferSize: 1 })
+    );
+
+    this.expandedRows$ = this.clientInfo$.pipe(map((info: any) => {
+      return info.workers.reduce((pre: any, cur: any) => { pre[cur.name] = true; return pre; }, {});
+    }));
+
+    this.chartData$ = timer(0, 600000).pipe(
+      switchMap(() => this.clientService.getClientInfoChart(this.address)),
+      map((chartData: any[]) => {
         const GROUP_SIZE = 12; //6 = 1 hour
 
-
         let hourlyData = [];
-
         for (let i = GROUP_SIZE; i < chartData.length; i += GROUP_SIZE) {
           let sum = 0;
           for (let j = GROUP_SIZE - 1; j >= 0; j--) {
@@ -76,7 +68,6 @@ export class DashboardComponent implements AfterViewInit {
           sum = sum / GROUP_SIZE;
           hourlyData.push({ y: sum, x: chartData[i].label });
         }
-
 
         const data = chartData.map((d: any) => { return { y: d.data, x: d.label } });
 
@@ -88,8 +79,8 @@ export class DashboardComponent implements AfterViewInit {
               label: '2 Hour',
               data: hourlyData,
               fill: false,
-              backgroundColor: documentStyle.getPropertyValue('--yellow-600'),
-              borderColor: documentStyle.getPropertyValue('--yellow-600'),
+              backgroundColor: yellow600,
+              borderColor: yellow600,
               tension: .4,
               pointRadius: 1,
               borderWidth: 1
@@ -99,19 +90,16 @@ export class DashboardComponent implements AfterViewInit {
               label: '10 Minute',
               data: data,
               fill: false,
-              backgroundColor: documentStyle.getPropertyValue('--primary-color'),
-              borderColor: documentStyle.getPropertyValue('--primary-color'),
+              backgroundColor: primaryColor,
+              borderColor: primaryColor,
               tension: .4,
               pointRadius: 1,
               borderWidth: 1
-            },
-
+            }
           ]
-        }
+        };
       })
     );
-
-
 
     this.chartOptions = {
       maintainAspectRatio: false,
@@ -151,12 +139,6 @@ export class DashboardComponent implements AfterViewInit {
         }
       }
     };
-
-  }
-
-
-
-  ngAfterViewInit() {
 
   }
 
