@@ -65,7 +65,7 @@ export class SplashComponent {
           labels: chartData.map((d: any) => d.label),
           datasets: [
             {
-              label: 'Hashrate',
+              label: 'Pool Hashrate',
               data: chartData.map((d: any) => d.data),
               fill: false,
               backgroundColor: primaryColor,
