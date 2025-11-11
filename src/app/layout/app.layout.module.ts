@@ -1,4 +1,3 @@
-import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -28,7 +27,6 @@ import { AppTopBarComponent } from './app.topbar.component';
     imports: [
         BrowserModule,
         FormsModule,
-        HttpClientModule,
         BrowserAnimationsModule,
         InputTextModule,
         SidebarModule,
@@ -37,7 +35,6 @@ import { AppTopBarComponent } from './app.topbar.component';
         InputSwitchModule,
         RippleModule,
         RouterModule,
-        //   AppConfigModule
     ],
     exports: [AppLayoutComponent]
 })

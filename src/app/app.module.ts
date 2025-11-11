@@ -1,6 +1,7 @@
 import 'chartjs-adapter-moment';
 
 import { CommonModule, HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { provideHttpClient } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -47,6 +48,7 @@ import { NumberSuffixPipe } from './pipes/number-suffix.pipe';
   ],
   providers: [
     { provide: LocationStrategy, useClass: HashLocationStrategy },
+    provideHttpClient(),
   ],
   bootstrap: [AppComponent]
 })
