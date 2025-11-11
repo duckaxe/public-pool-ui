@@ -3,16 +3,26 @@
 }
 
 #logo {
+    top: 1rem;
     left: 50%;
-    margin-left: -100px;
-    height: 200px;
-    width: 200px;
+    margin-left: -4rem;
+    width: 8rem;
+    height: 8rem;
     position: absolute;
-    top: -18px;
+
+    @media screen and (min-width: 769px) {
+        width: 10rem;
+        height: 10rem;
+        margin-left: -5rem;
+    }
 }
 
 .title {
-    margin-top: 55px;
+    margin-top: 1rem;
+
+    @media screen and (min-width: 769px) {
+        margin-top: 3rem;
+    }
 }
 
 .main {
@@ -36,7 +46,7 @@
         padding: 1rem;
         text-align: center;
     }
-    
+
     .info code {
         max-width: 90%;
         margin: 0 auto;
@@ -49,7 +59,7 @@
         font-size: large;
         padding: 0.5rem;
     }
-    
+
     .info code {
         white-space: pre-wrap;
         word-wrap: break-word;

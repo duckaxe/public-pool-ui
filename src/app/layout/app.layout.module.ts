@@ -1,4 +1,3 @@
-import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -11,19 +10,16 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { RippleModule } from 'primeng/ripple';
 import { SidebarModule } from 'primeng/sidebar';
 
-import { AppFooterComponent } from './app.footer.component';
 import { AppLayoutComponent } from './app.layout.component';
 import { AppMenuComponent } from './app.menu.component';
 import { AppMenuitemComponent } from './app.menuitem.component';
 import { AppSidebarComponent } from './app.sidebar.component';
 import { AppTopBarComponent } from './app.topbar.component';
 
-//import { AppConfigModule } from './config/config.module';
 @NgModule({
     declarations: [
         AppMenuitemComponent,
         AppTopBarComponent,
-        AppFooterComponent,
         AppMenuComponent,
         AppSidebarComponent,
         AppLayoutComponent,
@@ -31,7 +27,6 @@ import { AppTopBarComponent } from './app.topbar.component';
     imports: [
         BrowserModule,
         FormsModule,
-        HttpClientModule,
         BrowserAnimationsModule,
         InputTextModule,
         SidebarModule,
@@ -40,7 +35,6 @@ import { AppTopBarComponent } from './app.topbar.component';
         InputSwitchModule,
         RippleModule,
         RouterModule,
-        //   AppConfigModule
     ],
     exports: [AppLayoutComponent]
 })
