@@ -1,53 +1,24 @@
-# PublicPoolUi
+## Public Pool UI
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.0.3.
+> The user interface for the [Public Pool](https://github.com/benjamin-wilson/public-pool) adapted for use on Umbrel.
 
-## Dependencies
 
-Requires [Public-Pool](https://github.com/benjamin-wilson/public-pool) to be running
+### Motivation
 
-## Development server
+The Public Pool UI on Umbrel has not been changed for a year. It was time to update the interface, fix some bugs, and make improvements. Then, pack it all into a Docker container and submit the image to the Umbrel App Store.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
-## Code scaffolding
+### Releases
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+* https://github.com/duckaxe/public-pool-ui/releases
 
-## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+### Donations
 
-## Running unit tests
+* `bc1q8w3sx9zlyytlhrj37h7xhgdzemnw0zj5maway4`
+* [+wonderfulspring37](https://paynym.rs/+wonderfulspring37)
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-## Running end-to-end tests
+### Legal
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
-
-## Deployment
-
-Install pm2 (https://pm2.keymetrics.io/)
-
-```bash
-$ pm2 serve --spa dist/public-pool-ui/ 3335 --name ui
-```
-
-## Docker
-
-```bash
-$ docker build -t public-pool-ui .
-$ docker run --name public-pool-ui --rm -p 8080:80 public-pool-ui
-```
-
-From Docker commands, website will be accessible on [http://localhost:8080](http://localhost:8080). By default Caddy server listen on port 80, but we bind it to port 8080 which allows you to launch image without root permissions.
-
-Available variables:
-* `DOMAIN`: website domain (default: `localhost`)
-* `LOGLEVEL`: loglevel in stdout (default: `INFO`)
-* `LOGFORMAT`: log format in stdout (default: `json`)
+For academic and research purposes only.
