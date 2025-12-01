@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  API_URL: ':2019',
+  API_URL: '',
   STRATUM_URL: ':2018'
 };

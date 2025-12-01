@@ -16,10 +16,6 @@ export class EnvService {
   }
 
   get apiUrl(): string {
-    if (environment.API_URL.startsWith(':')) {
-      return this.getProtocol() + this.getHost() + environment.API_URL;
-    }
-
     return environment.API_URL;
   }
 
